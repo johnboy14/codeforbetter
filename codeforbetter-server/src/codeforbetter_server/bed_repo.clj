@@ -6,8 +6,8 @@
   [bed]
   (sql/with-connection db-spec
   (sql/insert-values :beds
-                     [:name]
-                     [(:name bed)]))
+                     [:name :status]
+                     [(:name bed) false]))
 )
 
 (defn all-beds
@@ -16,6 +16,12 @@
   (sql/with-query-results rs ["select * from beds"]
     (doall (if (empty? rs) [] rs))))
 )
+
+(defn single-bed
+  [bed]
+  (sql/with-connection db-spec
+    (sql/with-query-results rs ["select * from beds where name=?" (:name bed)]
+      (doall (if (empty? rs) (throw Exception) (first rs))))))
 
 (defn delete-bed
   [name]

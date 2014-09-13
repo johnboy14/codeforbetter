@@ -22,7 +22,8 @@
   (sql/with-connection db-spec
     (sql/create-table
      :beds
-     [:name "varchar(255) PRIMARY KEY"])))
+     [:name "varchar(255) PRIMARY KEY"]
+     [:status "boolean"])))
 
 (defn create-tables
   "Creates tables"
