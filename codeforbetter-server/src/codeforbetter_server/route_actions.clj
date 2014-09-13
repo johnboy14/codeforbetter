@@ -5,7 +5,11 @@
 
 (defn add-bed [bed]
   (bedrepo/create-bed bed)
-  (bedrepo/single-bed bed))
+  (bedrepo/single-bed (:name bed)))
 
 (defn delete-bed [name]
   (bedrepo/delete-bed name))
+
+(defn claim-bed [name]
+  (bedrepo/update-bed {:name name :available false})
+  (bedrepo/single-bed name))
