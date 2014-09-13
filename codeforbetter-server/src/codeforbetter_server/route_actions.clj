@@ -6,3 +6,6 @@
 (defn add-bed [bed]
   (bedrepo/create-bed bed)
   bed)
+
+(defn delete-bed [name]
+  (bedrepo/delete-bed name))

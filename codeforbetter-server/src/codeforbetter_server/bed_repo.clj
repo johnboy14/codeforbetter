@@ -16,3 +16,8 @@
   (sql/with-query-results rs ["select * from beds"]
     (doall (if (empty? rs) [] rs))))
 )
+
+(defn delete-bed
+  [name]
+  (sql/with-connection db-spec
+    (sql/delete-rows :beds ["name=?" name])))

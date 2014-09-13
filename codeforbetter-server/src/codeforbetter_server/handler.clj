@@ -15,6 +15,7 @@
   (GET "/" [] "Hello World")
   (GET "/bed" [] (json-response (all-beds)))
   (PUT "/bed" request (json-response (add-bed (parse-string (slurp (:body request)) true)) 201))
+  (DELETE "/bed/:name" [name] (delete-bed name))
   (route/resources "/")
   (route/not-found "Not Found"))
 

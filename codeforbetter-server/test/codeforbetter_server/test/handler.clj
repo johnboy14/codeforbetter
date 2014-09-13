@@ -22,5 +22,15 @@
       (:status get-beds-response) => 200
       (:body get-beds-response) => "[{\"name\":\"bed1\"}]"))
 
+    (fact "Delete a bed, should return 200 response"
+    (let [response (app (mock/request :delete "/bed/whatevs"))]
+      (:status response) => 200))
+
+    (fact "Delete a bed, should not find bed"
+    (let [add-bed-response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+          response (app (mock/request :delete "/bed/bed1"))
+          get-beds-response (app (mock/request :get "/bed"))]
+      (:body get-beds-response) => "[]"))
+
 
 
