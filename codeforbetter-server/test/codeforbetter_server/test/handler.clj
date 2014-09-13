@@ -16,6 +16,12 @@
       (:status response) => 201
       (:body response) =>"{\"name\":\"bed1\"}"))
 
+    (fact "Add a bed, return new bed"
+    (let [response1 (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+          response2 (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))]
+      (:status response1) => 201
+      (:status response2) => 400))
+
     (fact "Add a bed, return a vector containing new bed"
     (let [add-bed-response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
           get-beds-response (app (mock/request :get "/bed"))]
