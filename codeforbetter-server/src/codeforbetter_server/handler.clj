@@ -14,7 +14,7 @@
 (defroutes app-routes
   (GET "/" [] "Hello World")
   (GET "/bed" [] (json-response (all-beds)))
-  (PUT "/bed" request (json-response (add-bed (parse-string (slurp (:body request)))) 201))
+  (PUT "/bed" request (json-response (add-bed (parse-string (slurp (:body request)) true)) 201))
   (route/resources "/")
   (route/not-found "Not Found"))
 

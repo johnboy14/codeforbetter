@@ -4,7 +4,6 @@
 
 (defn create-bed
   [bed]
-  (println bed)
   (sql/with-connection db-spec
   (sql/insert-values :beds
                      [:name]

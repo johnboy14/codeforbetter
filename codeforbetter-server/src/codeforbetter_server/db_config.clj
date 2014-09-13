@@ -22,8 +22,7 @@
   (sql/with-connection db-spec
     (sql/create-table
      :beds
-     [:id "INTEGER PRIMARY KEY AUTO_INCREMENT"]
-     [:name "varchar(255)"])))
+     [:name "varchar(255) PRIMARY KEY"])))
 
 (defn create-tables
   "Creates tables"
