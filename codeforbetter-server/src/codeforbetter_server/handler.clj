@@ -12,7 +12,6 @@
    :body (generate-string data)})
 
 (defroutes app-routes
-  (GET "/" [] "Hello World")
   (GET "/bed" [] (json-response (all-beds)))
   (PUT "/bed" request (try (json-response (add-bed (parse-string (slurp (:body request)) true)) 201) (catch Exception e {:status 400 :body e})))
   (DELETE "/bed/:name" [name] (delete-bed name))

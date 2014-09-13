@@ -6,7 +6,7 @@
   [bed]
   (sql/with-connection db-spec
   (sql/insert-values :beds
-                     [:name :status]
+                     [:name :available]
                      [(:name bed) false]))
 )
 

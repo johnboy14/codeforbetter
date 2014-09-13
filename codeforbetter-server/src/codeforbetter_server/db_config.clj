@@ -23,7 +23,7 @@
     (sql/create-table
      :beds
      [:name "varchar(255) PRIMARY KEY"]
-     [:status "boolean"])))
+     [:available "boolean"])))
 
 (defn create-tables
   "Creates tables"

@@ -26,7 +26,7 @@
           get-beds-response (app (mock/request :get "/bed"))]
       (:status get-beds-response) => 200
       (:body get-beds-response) => (contains "\"name\":\"bed1\"")
-      (:body get-beds-response) => (contains "\"status\":false")))
+      (:body get-beds-response) => (contains "\"available\":false")))
 
     (fact "Delete a bed, should return 200 response"
     (let [response (app (mock/request :delete "/bed/whatevs"))]
@@ -40,5 +40,5 @@
 
     (fact "Create a bed, status is available"
           (let [response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))]
-            (:body response) => (contains "\"status\":false")))
+            (:body response) => (contains "\"available\":false")))
 
