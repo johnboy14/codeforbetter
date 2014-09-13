@@ -13,3 +13,10 @@
 (defn claim-bed [name]
   (bedrepo/update-bed {:name name :available false})
   (bedrepo/single-bed name))
+
+(defn release-bed [name]
+  (bedrepo/update-bed {:name name :available true})
+  (bedrepo/single-bed name))
+
+(defn available-beds []
+  (bedrepo/available-beds))

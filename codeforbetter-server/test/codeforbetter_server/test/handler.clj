@@ -50,3 +50,21 @@
             (:status claim-response) => 200
             (:body claim-response) => (contains "\"available\":false")))
 
+    (fact "Release an occupied bed. Bed is available"
+          (let [create-response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+                claim-response (app (mock/request :post "/bed/claim/bed1" ""))
+                release-response (app (mock/request :post "/bed/release/bed1" ""))]
+            (:status release-response) => 200
+            (:body release-response) => (contains "\"available\":true")))
+
+    (fact "3 beds, 1 available, query available returns 1 bed"
+          (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+          (app (mock/request :put "/bed" "{\"name\": \"bed2\"}"))
+          (app (mock/request :put "/bed" "{\"name\": \"bed3\"}"))
+          (app (mock/request :post "/bed/claim/bed1" ""))
+          (app (mock/request :post "/bed/claim/bed3" ""))
+          (let [response (app (mock/request :get "/bed/available"))]
+          (:status response) => 200
+          (:body response) => (contains "\"name\":\"bed2\"")
+          (:body response) => (contains "\"available\":true")))
+

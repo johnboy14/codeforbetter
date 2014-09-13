@@ -34,3 +34,9 @@
     (sql/update-values :beds
                        ["name=?" (:name bed)]
                        {:available (:available bed)})))
+
+(defn available-beds
+  []
+  (sql/with-connection db-spec
+    (sql/with-query-results rs ["select * from beds where available=true"]
+      (doall (if (empty? rs) [] rs)))))

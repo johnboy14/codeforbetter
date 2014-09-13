@@ -16,6 +16,8 @@
   (PUT "/bed" request (try (json-response (add-bed (parse-string (slurp (:body request)) true)) 201) (catch Exception e {:status 400 :body e})))
   (DELETE "/bed/:name" [name] (delete-bed name))
   (POST "/bed/claim/:name" [name] (json-response (claim-bed name)))
+  (POST "/bed/release/:name" [name] (json-response (release-bed name)))
+  (GET "/bed/available" [] (json-response (available-beds)))
   (route/resources "/")
   (route/not-found "Not Found"))
 
