@@ -36,9 +36,12 @@ body {
   padding-left: 10px;
   padding-top: 8px;
   padding-bottom: 8px;
+  display: inline-block;
+  width: 200px;
 }
 
 .beds input {
+  margin-right: 5px;
   float: right;
   width: 80px;
 }
