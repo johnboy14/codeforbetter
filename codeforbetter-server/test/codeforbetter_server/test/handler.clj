@@ -42,9 +42,9 @@
           (let [response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))]
             (:body response) => (contains "\"available\":true")))
 
-    (fact "Claim a bed, bed is now unavailable"
+    (fact "Claim a bed for 30 mins, bed is now unavailable"
           (let [create-response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
-                claim-response (app (mock/request :post "/bed/claim/bed1" ""))]
+                claim-response (app (mock/request :post "/bed/claim/bed1/30" ""))]
             (:status create-response) => 201
             (:body create-response) => (contains "\"available\":true")
             (:status claim-response) => 200
@@ -52,7 +52,7 @@
 
     (fact "Release an occupied bed. Bed is available"
           (let [create-response (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
-                claim-response (app (mock/request :post "/bed/claim/bed1" ""))
+                claim-response (app (mock/request :post "/bed/claim/bed1/30" ""))
                 release-response (app (mock/request :post "/bed/release/bed1" ""))]
             (:status release-response) => 200
             (:body release-response) => (contains "\"available\":true")))
@@ -61,10 +61,18 @@
           (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
           (app (mock/request :put "/bed" "{\"name\": \"bed2\"}"))
           (app (mock/request :put "/bed" "{\"name\": \"bed3\"}"))
-          (app (mock/request :post "/bed/claim/bed1" ""))
-          (app (mock/request :post "/bed/claim/bed3" ""))
+          (app (mock/request :post "/bed/claim/bed1/30" ""))
+          (app (mock/request :post "/bed/claim/bed3/30" ""))
           (let [response (app (mock/request :get "/bed/available"))]
           (:status response) => 200
           (:body response) => (contains "\"name\":\"bed2\"")
           (:body response) => (contains "\"available\":true")))
+
+    (fact "Claim a bed for 10mins. Query for beds availabe next 20mins, should return bed"
+          (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+          (app (mock/request :post "/bed/claim/bed1/10" ""))
+          (let [response (app (mock/request :get "/bed/available/20"))]
+            (:status response) => 200
+            (:body response) => (contains "\"name\":\"bed1\"")
+          ))
 

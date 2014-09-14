@@ -8,7 +8,8 @@
                  [korma "0.3.0"]
                  [com.h2database/h2 "1.3.170"]
                  [org.postgresql/postgresql "9.2-1002-jdbc4"]
-                 [midje "1.6.3"]]
+                 [midje "1.6.3"]
+                 [clj-time "0.8.0"]]
   :plugins [[lein-ring "0.8.11"]
             [lein-midje "3.1.3"]]
   :ring {:handler codeforbetter-server.handler/app
