@@ -68,11 +68,31 @@
           (:body response) => (contains "\"name\":\"bed2\"")
           (:body response) => (contains "\"available\":true")))
 
+    (fact "3 beds, 1 available, query unavailable returns 2 beds"
+          (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+          (app (mock/request :put "/bed" "{\"name\": \"bed2\"}"))
+          (app (mock/request :put "/bed" "{\"name\": \"bed3\"}"))
+          (app (mock/request :post "/bed/claim/bed1/30" ""))
+          (app (mock/request :post "/bed/claim/bed3/30" ""))
+          (let [response (app (mock/request :get "/bed/unavailable"))]
+          (:status response) => 200
+          (:body response) => (contains "\"name\":\"bed1\"")
+          (:body response) => (contains "\"name\":\"bed3\"")
+          (:body response) => (contains "\"available\":false")))
+
     (fact "Claim a bed for 10mins. Query for beds availabe next 20mins, should return bed"
           (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
           (app (mock/request :post "/bed/claim/bed1/10" ""))
           (let [response (app (mock/request :get "/bed/available/20"))]
             (:status response) => 200
             (:body response) => (contains "\"name\":\"bed1\"")
+          ))
+
+        (fact "Claim a bed for 20mins. Query for beds availabe next 10mins, should not return bed"
+          (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
+          (app (mock/request :post "/bed/claim/bed1/20" ""))
+          (let [response (app (mock/request :get "/bed/available/10"))]
+            (:status response) => 200
+            (:body response) => "[]"
           ))
 

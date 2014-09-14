@@ -7,11 +7,19 @@
 
 (defn coerce-with-time
   [rs]
-  (vec (map #(conj {}{:name (:name %) :available (:available %) :freeat (clj-time-coerce/to-date-time (:freeat %))}) rs)))
+  (vec (map #(conj {}{:name (:name %) :available (:available %) :freeat (clj-time-coerce/from-long (:freeat %))}) rs)))
 
 (defn coerce
   [rs]
   (vec (map #(conj {}{:name (:name %) :available (:available %)}) rs)))
+
+(defn update-bed
+  [bed]
+  (sql/with-connection db-spec
+    (sql/update-values :beds
+                       ["name=?" (:name bed)]
+                       {:available (:available bed)
+                        :freeat (clj-time-coerce/to-long(:freeat bed))})))
 
 (defn create-bed
   [bed]
@@ -39,13 +47,6 @@
   (sql/with-connection db-spec
     (sql/delete-rows :beds ["name=?" name])))
 
-(defn update-bed
-  [bed]
-  (sql/with-connection db-spec
-    (sql/update-values :beds
-                       ["name=?" (:name bed)]
-                       {:available (:available bed)
-                        :freeat (clj-time-coerce/to-sql-date(:freeat bed))})))
 
 (defn available-beds
   []
@@ -53,10 +54,17 @@
     (sql/with-query-results rs ["select * from beds where available=true"]
       (doall (if (empty? rs) [] (coerce rs))))))
 
+(defn unavailable-beds
+  []
+  (sql/with-connection db-spec
+    (sql/with-query-results rs ["select * from beds where available=false"]
+      (doall (if (empty? rs) [] (coerce rs))))))
+
+
 (defn available-beds-in
   [duration]
   (sql/with-connection db-spec
-    (map #(dissoc % :freeat)(filter #(clj-time/before? (:freeat %) (clj-time/plus (l/local-now) (clj-time/minutes (read-string duration)))) (sql/with-query-results rs ["select * from beds where available=false"]
+    (map #(dissoc % :freeat)(filter #(clj-time/before? (:freeat %) (clj-time/plus (l/local-now) (clj-time/seconds (read-string duration)))) (sql/with-query-results rs ["select * from beds where available=false"]
       (doall (if (empty? rs) [] (coerce-with-time rs))))))))
 
-(available-beds-in "10")
+(available-beds-in "1")

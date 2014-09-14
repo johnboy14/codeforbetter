@@ -1,4 +1,3 @@
-<p>This is the beds view.</p>
 <!doctype html>
 <html>
 <head>
@@ -8,26 +7,52 @@
 	<title>Demo</title>
 </head>
 <body>
-	<div class="beds allbeds"></div>
 	<div class="beds availablebeds"></div>
-	<div class="beds 30minbeds"></div>
+	<div class="beds soonbeds"></div>
+	<div class="beds unavbeds"></div>
 	<script>
+	function unavailablebeds () {
+		$.getJSON( "http://localhost:3000/bed/unavailable", function(data) {
+			$('.unavbeds').html('');
+			$.each(data, function( key, val ) {
+				$('.unavbeds').append("<div>" + val.name + "<input type='button' value='Release' onclick='release(\"" + val.name + "\")' /></div>");
+			});
+		} );
+	}
+	function availablebeds () {
+		$.getJSON( "http://localhost:3000/bed/available", function(data) {
+			$('.availablebeds').html('');
+			$.each(data, function( key, val ) {
+				$('.availablebeds').append("<div>" + val.name + "<input type='button' value='Claim' onclick='claimbed(\"" + val.name + "\")' /></div>");
+			});
+		} );
+	}
+	function availablein30mins() {
+		$.getJSON( "http://localhost:3000/bed/available/30", function(data) {
+			$('.soonbeds').html('');
+			$.each(data, function( key, val ) {
+				$('.soonbeds').append("<div>" + val.name + "<input type='button' value='Release' onclick='release(\"" + val.name + "\")' /></div>");
+			});
+		} );
+	}
+	function claimbed (name) {
+		$.post("http://localhost:3000/bed/claim/" + name + "/45", function(data) {
+			refresh();
+		});
+	}
+	function release (name) {
+		$.post("http://localhost:3000/bed/release/" + name, function(data) {
+			refresh();
+		});
+	}
+	function refresh() {
+		unavailablebeds();
+		availablebeds();
+		availablein30mins();
+		setTimeout(refresh, 5000);
+	}
 		$( document ).ready(function() {
-			$.getJSON( "http://localhost:3000/bed", function(data) {
-				$.each(data, function( key, val ) {
-					$('.allbeds').append("<div>" + val.name + "</div>");
-				});
-			} );
-			$.getJSON( "http://localhost:3000/bed/available", function(data) {
-				$.each(data, function( key, val ) {
-					$('.availablebeds').append("<div>" + val.name + "</div>");
-				});
-			} );
-			$.getJSON( "http://localhost:3000/bed/available/30", function(data) {
-				$.each(data, function( key, val ) {
-					$('.30minbeds').append("<div>" + val.name + "</div>");
-				});
-			} );
+			refresh();
 		});
 	</script>
 </body>

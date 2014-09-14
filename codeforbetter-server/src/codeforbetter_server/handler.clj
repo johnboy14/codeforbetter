@@ -18,6 +18,7 @@
   (POST "/bed/claim/:name/:duration" [name duration] (json-response (claim-bed name duration)))
   (POST "/bed/release/:name" [name] (json-response (release-bed name)))
   (GET "/bed/available" [] (json-response (available-beds)))
+  (GET "/bed/unavailable" [] (json-response (unavailable-beds)))
   (GET "/bed/available/:duration" [duration] (json-response (available-beds-in duration)))
   (route/resources "/")
   (route/not-found "Not Found"))

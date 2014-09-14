@@ -14,7 +14,7 @@
   (bedrepo/delete-bed name))
 
 (defn claim-bed [name duration]
-  (bedrepo/update-bed {:name name :available false :freeat (tm/plus (l/local-now) (tm/minutes (read-string duration)))})
+  (bedrepo/update-bed {:name name :available false :freeat (tm/plus (l/local-now) (tm/seconds (read-string duration)))})
   (bedrepo/single-bed name))
 
 (defn release-bed [name]
@@ -23,6 +23,9 @@
 
 (defn available-beds []
   (bedrepo/available-beds))
+
+(defn unavailable-beds []
+  (bedrepo/unavailable-beds))
 
 (defn available-beds-in [duration]
   (bedrepo/available-beds-in duration))

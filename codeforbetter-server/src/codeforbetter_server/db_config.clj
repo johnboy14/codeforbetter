@@ -24,7 +24,7 @@
      :beds
      [:name "varchar(255) PRIMARY KEY"]
      [:available "boolean"]
-     [:freeat :datetime])))
+     [:freeat "bigint"])))
 
 (defn create-tables
   "Creates tables"

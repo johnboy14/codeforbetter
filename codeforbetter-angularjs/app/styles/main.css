@@ -31,8 +31,31 @@ body {
   border-top: 1px solid #e5e5e5;
 }
 
-.beds {
-  padding-bottom: 10px;
+.beds div {
+  clear: both;
+  padding-left: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.beds input {
+  float: right;
+  width: 80px;
+}
+
+.unavbeds div {
+  margin: 1px;
+  background-color: #FF5F5F;
+}
+
+.availablebeds div {
+  margin: 1px;
+  background-color: #00FF99;  
+}
+
+.soonbeds div {
+  margin: 1px;
+  background-color: #FFAD33;  
 }
 
 /* Customize container */
