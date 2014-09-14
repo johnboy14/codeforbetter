@@ -72,8 +72,8 @@
           (app (mock/request :put "/bed" "{\"name\": \"bed1\"}"))
           (app (mock/request :put "/bed" "{\"name\": \"bed2\"}"))
           (app (mock/request :put "/bed" "{\"name\": \"bed3\"}"))
-          (app (mock/request :post "/bed/claim/bed1/30" ""))
-          (app (mock/request :post "/bed/claim/bed3/30" ""))
+          (app (mock/request :post "/bed/claim/bed1/60" ""))
+          (app (mock/request :post "/bed/claim/bed3/60" ""))
           (let [response (app (mock/request :get "/bed/unavailable"))]
           (:status response) => 200
           (:body response) => (contains "\"name\":\"bed1\"")

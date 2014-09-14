@@ -54,12 +54,17 @@
     (sql/with-query-results rs ["select * from beds where available=true"]
       (doall (if (empty? rs) [] (coerce rs))))))
 
+;(defn unavailable-beds
+;  []
+;  (sql/with-connection db-spec
+;    (sql/with-query-results rs ["select * from beds where available=false"]
+;      (doall (if (empty? rs) [] (coerce rs))))))
+
 (defn unavailable-beds
   []
   (sql/with-connection db-spec
-    (sql/with-query-results rs ["select * from beds where available=false"]
-      (doall (if (empty? rs) [] (coerce rs))))))
-
+    (map #(dissoc % :freeat)(filter #(clj-time/after? (:freeat %) (clj-time/plus (l/local-now) (clj-time/seconds (read-string "30")))) (sql/with-query-results rs ["select * from beds where available=false"]
+      (doall (if (empty? rs) [] (coerce-with-time rs))))))))
 
 (defn available-beds-in
   [duration]
