@@ -4,7 +4,8 @@
             [compojure.route :as route]
             [cheshire.core :refer :all]
             [codeforbetter-server.route-actions :refer :all]
-            [codeforbetter-server.db-config :as db]))
+            [codeforbetter-server.db-config :as db])
+  )
 
 (defn json-response [data & [status]]
   {:status (or status 200)

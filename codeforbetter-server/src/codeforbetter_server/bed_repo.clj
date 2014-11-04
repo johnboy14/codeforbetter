@@ -63,7 +63,10 @@
 (defn unavailable-beds
   []
   (sql/with-connection db-spec
-    (map #(dissoc % :freeat)(filter #(clj-time/after? (:freeat %) (clj-time/plus (l/local-now) (clj-time/seconds (read-string "30")))) (sql/with-query-results rs ["select * from beds where available=false"]
+    (map #(dissoc % :freeat)
+         (filter
+           #(clj-time/after? (:freeat %) (clj-time/plus (l/local-now) (clj-time/seconds (read-string "30"))))
+           (sql/with-query-results rs ["select * from beds where available=false"]
       (doall (if (empty? rs) [] (coerce-with-time rs))))))))
 
 (defn available-beds-in
@@ -72,4 +75,4 @@
     (map #(dissoc % :freeat)(filter #(clj-time/before? (:freeat %) (clj-time/plus (l/local-now) (clj-time/seconds (read-string duration)))) (sql/with-query-results rs ["select * from beds where available=false"]
       (doall (if (empty? rs) [] (coerce-with-time rs))))))))
 
-(available-beds-in "1")
+;(available-beds-in "1")

@@ -38,8 +38,10 @@
 
 (defn clean-tables
   []
-  (drop-tables)
-  (create-tables))
+  (let [exists (.exists (new java.io.File (str db-store ".h2.db")))]
+    (when exists (drop-tables)))
+  (create-tables)
+  )
 
 ;(sql/with-connection db-spec
 ;  (sql/insert-values :beds
